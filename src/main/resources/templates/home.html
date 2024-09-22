@@ -1,9 +1,15 @@
-<html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout :: layout(~{::main})}">
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="~{fragments/header :: header}"></head>
+<body class="flex flex-col">
+<div th:replace="~{fragments/bodyHeader :: bodyHeader}"></div>
 
-<body>
-<main>
-    jh
-</main>
+<div class="h-full">
+    <!--이 div 태그 안에 본문 작성하시면 됩니다!-->
+    <div>aa</div>
+    <div>aa</div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

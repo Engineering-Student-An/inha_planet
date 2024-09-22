@@ -1,23 +1,15 @@
-<header th:fragment="header">
-    <nav class="bg-white shadow-md py-4 fixed w-full top-0 z-20">
-        <div class="mx-2 px-4 flex justify-between items-center">
-            <a href="/">
-                <img src="/img/logo.png" style="width: 100px; height: auto" alt="logo" class="h-8"/>
-            </a>
-            <a href="/login" class="block px-3 py-2 text-sm text-white bg-gradient-to-r from-blue-500 to-blue-600 font-semibold rounded-lg transition duration-200 hover:bg-gradient-to-l hover:from-blue-900 hover:to-blue-700">로그인</a>
-        </div>
-    </nav>
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Inha Planet</title>
 
-    <div class="relative bg-gradient-to-r from-blue-400 to-purple-500 text-white py-32 mt-16 mb-8">
-        <div class="relative z-10 text-center">
-            <h1 class="text-5xl font-bold mb-4 shadow-text">[안창민] 블로그</h1>
-            <h4 class="text-xl text-blue-100 shadow-text">블로그에 오신 것을 환영합니다.</h4>
-        </div>
-    </div>
-</header>
+    <link rel="stylesheet" href="/css/footer.css"/>
+    <link rel="icon" type="image/png" href="/img/favicon.png">
 
-<style>
-    .shadow-text {
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    }
-</style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/js/footer.js"></script>
+</head>
