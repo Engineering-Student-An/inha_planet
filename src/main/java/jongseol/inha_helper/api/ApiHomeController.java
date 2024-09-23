@@ -10,16 +10,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class ApiHomeController {
 
     private final EmailService emailService;
     private final CoursemosService coursemosService;
 
-    @PostMapping("/api/join/email")
+    @PostMapping("/join/email")
     public ResponseEntity<String> sendEmail(@RequestBody EmailRequest emailRequest, HttpSession session) {
 
         String verifyCode = emailService.createVerifyCode();
@@ -34,9 +36,8 @@ public class ApiHomeController {
         return ResponseEntity.status(HttpStatus.OK).body("이메일 전송 완료\n\n\n\n" + emailRequest.getEmail() + "\n로 이메일을 전송했습니다.\n\n전송된 링크로 회원가입을 진행하세요!");
     }
 
-    @PostMapping("/api/join/iclass")
+    @PostMapping("/join/iclass")
     public ResponseEntity<String> loadIclassInfo(@RequestBody IclassForm iclassForm, HttpSession session) {
-
 
         try {
             // wstoken 가져오기
@@ -44,12 +45,22 @@ public class ApiHomeController {
 
             // utoken 가져오기
             String utoken = coursemosService.login(iclassForm.getStuId(), iclassForm.getPassword(), wstoken);
-            System.out.println("utoken = " + utoken);
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("I-Class 계정 인증 실패\n\n\n\n계정 정보 확인 후 다시 입력해주세요!");
         }
 
         session.setAttribute("iclassForm", iclassForm);
         return ResponseEntity.status(HttpStatus.OK).body("I-Class 계정 인증 성공\n\n\n\n아래의 버튼을 클릭해 회원가입을 완료하세요!\n");
+    }
+
+    @PostMapping("/timer")
+    public ResponseEntity<Void> timer(HttpSession session) {
+        if (session != null) {
+            // 세션 유효 시간을 30분으로 갱신
+            session.setMaxInactiveInterval(1800);  // 30분
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 }

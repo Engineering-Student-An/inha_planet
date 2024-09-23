@@ -8,6 +8,12 @@
     <!--이 div 태그 안에 본문 작성하시면 됩니다!-->
     <div>aa</div>
     <div>aa</div>
+    <div th:unless="${session.loginMember==null}">
+        <p th:text="${session.loginMember.name}"></p>
+    </div>
+    <div th:if="${session.loginMember==null}">
+        로그인하셈!
+    </div>
 </div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>

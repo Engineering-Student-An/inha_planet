@@ -26,18 +26,18 @@ public class SecurityConfig {
                 .formLogin((auth) -> auth.loginPage("/login")
 
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/", true)
+//                        .defaultSuccessUrl("/", true)
                         .usernameParameter("loginId")
                         .passwordParameter("password")
                         .permitAll()
-//                        .successHandler(new CustomAuthenticationSuccessHandler())
-//                        .failureHandler(new CustomAuthenticationFailureHandler()) // 커스텀 실패 핸들러 설정
-
+                        .successHandler(new CustomAuthenticationSuccessHandler())
+                        .failureHandler(new CustomAuthenticationFailureHandler())
                 );
 
         http
                 .logout((auth) -> auth
                         .logoutUrl("/logout"));
+
 
         http
                 .csrf((auth) -> auth.disable());

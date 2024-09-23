@@ -3,19 +3,19 @@ package jongseol.inha_helper.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import jongseol.inha_helper.domain.Member;
 import jongseol.inha_helper.domain.dto.IclassForm;
 import jongseol.inha_helper.domain.dto.JoinRequest;
 import jongseol.inha_helper.domain.dto.LoginRequest;
 import jongseol.inha_helper.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,8 +23,11 @@ public class HomeController {
 
     private final MemberService memberService;
 
-    @GetMapping
-    public String home() {
+    @GetMapping("/")
+    public String home(SecurityContext context) {
+
+        System.out.println(" = " + context.getAuthentication().getName());
+
         return "home";
     }
 
@@ -93,6 +96,28 @@ public class HomeController {
         memberService.join((JoinRequest) session.getAttribute("joinRequest"),
                 (String) request.getSession().getAttribute("email"),
                 (IclassForm) session.getAttribute("iclassForm"));
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/login/error")
+    public String loginError(Model model) {
+
+        model.addAttribute("errorMessage", "일치하는 회원 정보가 없습니다.\n로그인 정보를 확인해주세요.");
+        model.addAttribute("nextUrl", "/login");
+
+        return "error/errorMessage";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest httpServletRequest) {
+
+        HttpSession httpSession = httpServletRequest.getSession(true);
+
+        if (httpSession != null) {
+            System.out.println("httpSession.getAttributeNames() = " + httpSession.getAttributeNames());
+            httpSession.invalidate();
+        }
 
         return "redirect:/";
     }

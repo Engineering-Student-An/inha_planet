@@ -1,6 +1,7 @@
 package jongseol.inha_helper.service;
 
 import jakarta.transaction.Transactional;
+import jongseol.inha_helper.domain.Member;
 import jongseol.inha_helper.domain.dto.IclassForm;
 import jongseol.inha_helper.domain.dto.JoinRequest;
 import jongseol.inha_helper.repository.MemberRepository;
@@ -24,5 +25,9 @@ public class MemberService{
 
     public boolean checkLoginIdDuplicate(String loginId) {
         return memberRepository.existsByLoginId(loginId);
+    }
+
+    public Member findMemberByLoginId(String loginId) {
+        return memberRepository.findMemberByLoginId(loginId);
     }
 }

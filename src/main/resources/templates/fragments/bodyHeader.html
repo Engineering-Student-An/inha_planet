@@ -1,10 +1,73 @@
 <div th:fragment="bodyHeader">
     <nav class="bg-gray-200 shadow-md py-4 w-full top-0 z-20">
         <div class="mx-2 px-4 flex justify-between items-center">
-            <a href="/">
-                <img src="/img/logo.png" style="width: 100px; height: auto" alt="logo" class="h-8"/>
-            </a>
-            <a href="/login" class="block px-3 py-2 text-sm text-white bg-gradient-to-r from-blue-500 to-blue-600 font-semibold rounded-lg transition duration-200 hover:bg-gradient-to-l hover:from-blue-900 hover:to-blue-700">로그인</a>
+            <div class="flex flex-row items-center">
+                <div id="toggle-button" class="toggle-button">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <a href="/" class="logo"><img src="/img/logo.png" style="width: 100px; height: auto" alt="logo" class="h-8"/></a>
+            </div>
+
+            <div class="flex flex-row items-center">
+                <span th:if="${session.loginMember != null}" class="material-symbols-outlined mr-1">timer</span>
+                <p th:if="${session.loginMember != null}" class="text-sm mr-2"><span id="countdown" class="font-bold text-indigo-600"></span></p>
+                <button th:if="${session.loginMember != null}" id="timer" class="block px-2 py-1 mr-2 text-xs text-white font-semibold rounded-lg bg-gray-500 hover:bg-gray-600">시간 연장</button>
+                <a th:if="${session.loginMember == null}" href="/login" class="block px-3 py-2 text-sm text-white bg-gradient-to-r from-blue-500 to-blue-600 font-semibold rounded-lg transition duration-200 hover:bg-gradient-to-l hover:from-blue-900 hover:to-blue-700">로그인</a>
+                <a th:unless="${session.loginMember == null}" href="/logout" class="block px-3 py-2 text-sm text-white bg-gradient-to-r from-blue-500 to-blue-600 font-semibold rounded-lg transition duration-200 hover:bg-gradient-to-l hover:from-blue-900 hover:to-blue-700">로그아웃</a>
+            </div>
+
         </div>
+
     </nav>
+
+    <script th:inline="javascript" th:if="${session.loginMember != null}">
+        function startCountdown(duration) {
+            let timer = duration;
+            const countdownElement = document.getElementById('countdown');
+
+            const intervalId = setInterval(function () {
+                const minutes = parseInt(timer / 60, 10);
+                const seconds = parseInt(timer % 60, 10);
+
+                countdownElement.textContent = minutes + "분 " + seconds + "초";
+
+                if (--timer < 0) {
+                    clearInterval(intervalId);
+                    countdownElement.textContent = "세션 만료";
+                    setTimeout(() => {
+                        window.location.href = '/login?expired';
+                    }, 1000);
+                }
+            }, 1000);
+        }
+
+        // 서버에서 전달받은 남은 시간 (초 단위로 변환)
+        const remainingTime = /*[[${session.remainingSeconds}]]*/ 0;
+        startCountdown(remainingTime);
+    </script>
+    <script>
+        document.getElementById('timer').addEventListener('click', function() {
+            fetch('/api/timer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('로그인 만료 시간이 연장되었습니다.');
+                    } else {
+                        alert('로그인 만료 연장에 실패했습니다. 다시 시도해 주세요.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('서버와의 연결에 문제가 발생했습니다.');
+                });
+            // 현재 페이지를 새로 고침
+            window.location.reload();
+        });
+    </script>
 </div>
