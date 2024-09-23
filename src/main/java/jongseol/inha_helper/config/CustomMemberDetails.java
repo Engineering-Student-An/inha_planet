@@ -29,16 +29,16 @@ public class CustomMemberDetails implements UserDetails {
         return collection;
     }
 
-    // member의 비밀번호 반환
+    // password 반환
     @Override
     public String getPassword() {
         return member.getPassword();
     }
 
-    // member의 stuId 반환
+    // loginId 반환
     @Override
     public String getUsername() {
-        return member.getStuId();
+        return member.getLoginId();
     }
 
 

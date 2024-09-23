@@ -17,8 +17,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: gdscicross
-    password: tnjzecuxadcrrnrb
+    username: chm20060
+    password: mubhkxlvbsseesak
     properties:
       mail:
         smtp:
@@ -26,6 +26,7 @@ spring:
           timeout: 5000
           starttls:
             enable: true
+
   # devtools 자동 재시작 끔
   devtools:
     restart:

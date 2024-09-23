@@ -5,11 +5,14 @@
 <div th:replace="~{fragments/bodyHeader :: bodyHeader}"></div>
 
 <div id="wrap">
-    <!--이 div 태그 안에 본문 작성하시면 됩니다!-->
-    <div>aa</div>
-    <div>aa</div>
 </div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
+<script th:inline="javascript">
+    window.onload = function (){
+        window.location.href = [[${nextUrl}]]
+        alert([[${errorMessage}]])
+    }
+</script>
 </html>

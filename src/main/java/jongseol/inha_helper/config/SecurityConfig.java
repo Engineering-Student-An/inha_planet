@@ -26,8 +26,8 @@ public class SecurityConfig {
                 .formLogin((auth) -> auth.loginPage("/login")
 
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/home", true)
-                        .usernameParameter("stuId")
+                        .defaultSuccessUrl("/", true)
+                        .usernameParameter("loginId")
                         .passwordParameter("password")
                         .permitAll()
 //                        .successHandler(new CustomAuthenticationSuccessHandler())

@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="~{fragments/header :: header}"></head>
+<link rel="stylesheet" href="/css/modal.css"/>
+<body class="flex flex-col">
+<div th:replace="~{fragments/bodyHeader :: bodyHeader}"></div>
+<div id="wrap">
+    <header>
+        <div class="mt-1 mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 flex items-center">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900">회원가입 (2/3)</h1>
+            <div class="ml-6">
+                <div class="h-1 w-24 bg-blue-600 mb-1"></div>
+                <div class="flex justify-start text-blue-600 text-sm">Step 1</div>
+                <div class="flex justify-start text-gray-600 text-sm">개인 정보 입력</div>
+            </div>
+
+            <div class="ml-6">
+                <div class="h-1 w-24 bg-blue-600 mb-1"></div>
+                <div class="flex justify-start text-blue-600 text-sm">Step 2</div>
+                <div class="flex justify-start text-gray-600 text-sm">이메일 입력</div>
+            </div>
+
+            <div class="ml-6">
+                <div class="h-1 w-24 bg-gray-300 mb-1"></div>
+                <div class="flex justify-start text-blue-600 text-sm">Step 3</div>
+                <div class="flex justify-start text-gray-600 text-sm">I-Class 계정 정보 입력</div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 mb-6">
+            <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+                <form class="space-y-6" id="emailVerificationForm">
+                    <div>
+                        <label for="email" class="block text-sm font-medium leading-6 text-gray-900 mt-2">이메일 주소</label>
+                        <input type="email" id="email" name="email" required class="block w-full rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                placeholder="example@domain.com">
+                    </div>
+                    <div>
+                        <button type="submit" class="flex w-full justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-900">
+                            이메일 전송
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 모달 -->
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <p id="message">이메일 전송 중...</p>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+<script src="/js/email.js"></script>
+</html>
