@@ -97,7 +97,7 @@ public class HomeController {
                 (String) request.getSession().getAttribute("email"),
                 (IclassForm) session.getAttribute("iclassForm"));
 
-        return "redirect:/";
+        return "redirect:/login";
     }
 
     @GetMapping("/login/error")

@@ -1,6 +1,7 @@
 package jongseol.inha_helper.service;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Size;
 import jongseol.inha_helper.domain.Member;
 import jongseol.inha_helper.domain.dto.IclassForm;
 import jongseol.inha_helper.domain.dto.JoinRequest;
@@ -44,5 +45,26 @@ public class MemberService{
 
     public Member findMemberById(Long id) {
         return memberRepository.findById(id).orElse(null);
+    }
+
+    public boolean passwordCheck(Member member, String password) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        return encoder.matches(password, member.getPassword());
+    }
+
+    @Transactional
+    public void resetPassword(Member member, String password) {
+
+        Member updatedMember = Member.builder()
+                .id(member.getId())
+                .loginId(member.getLoginId())
+                .name(member.getName())
+                .password(bCryptPasswordEncoder.encode(password))
+                .stuId(member.getStuId())
+                .iPassword(member.getIPassword())
+                .email(member.getEmail()).build();
+
+        memberRepository.save(updatedMember);
     }
 }

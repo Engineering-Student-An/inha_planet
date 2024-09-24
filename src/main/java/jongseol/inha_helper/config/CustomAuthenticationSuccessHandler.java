@@ -42,7 +42,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             session.setAttribute("loginMemberId", loginMemberId);
 
             // 세션 유효 시간 설정
-            session.setMaxInactiveInterval(30 * 60 + 5);
+            session.setMaxInactiveInterval(30 * 60 + 4);
 
             Instant now = Instant.now();
             Instant expires = Instant.ofEpochMilli(session.getLastAccessedTime() + session.getMaxInactiveInterval() * 1000L);

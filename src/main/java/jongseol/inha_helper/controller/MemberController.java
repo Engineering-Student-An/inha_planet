@@ -1,16 +1,18 @@
 package jongseol.inha_helper.controller;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import jongseol.inha_helper.domain.Member;
 import jongseol.inha_helper.domain.dto.IclassForm;
+import jongseol.inha_helper.domain.dto.JoinRequest;
+import jongseol.inha_helper.domain.dto.PasswordRequest;
 import jongseol.inha_helper.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
@@ -53,6 +55,37 @@ public class MemberController {
         model.addAttribute("nextUrl", (code.equals(verifyCode)) ? "/myPage" : "/myPage/reset/email");
         model.addAttribute("errorMessage", (code.equals(verifyCode)) ? "이메일 주소 변경을 완료했습니다!" : "에러가 발생했습니다. 이메일 검증 단계로 돌아갑니다.");
         return "error/errorMessage";
+    }
+
+    @GetMapping("/myPage/reset/password")
+    public String resetPassword(Model model) {
+
+        model.addAttribute("passwordRequest", new PasswordRequest());
+
+        return "member/reset_password";
+    }
+
+    @PostMapping("/myPage/reset/password")
+    public String resetPasswordVerification(@Valid @ModelAttribute PasswordRequest passwordRequest, BindingResult bindingResult,
+                HttpSession session, Model model) {
+        Member loginMember = (Member) model.getAttribute("loginMember");
+
+        if(!memberService.passwordCheck(loginMember, passwordRequest.getCurrentPassword())) {
+            bindingResult.addError(new FieldError("passwordRequest",
+                    "currentPassword", "현재 비밀번호와 동일하지 않습니다!"));
+        }
+
+        if (!passwordRequest.getPassword().equals(passwordRequest.getPasswordCheck())) {
+            bindingResult.addError(new FieldError("passwordRequest",
+                    "passwordCheck", "비밀번호가 동일하지 않습니다!"));
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "member/reset_password";
+        }
+
+        memberService.resetPassword(loginMember, passwordRequest.getPassword());
+        return "redirect:/myPage";
     }
 
     @ModelAttribute("loginMember")
