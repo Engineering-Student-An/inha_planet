@@ -5,13 +5,28 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jongseol.inha_helper.domain.Member;
+import jongseol.inha_helper.service.CoursemosService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 
-public class CustomAuthenticationSuccessHandler implements org.springframework.security.web.authentication.AuthenticationSuccessHandler {
+@Component
+public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+
+    private final CoursemosService coursemosService;
+
+    @Autowired
+    public CustomAuthenticationSuccessHandler(CoursemosService coursemosService) {
+        this.coursemosService = coursemosService;
+    }
+
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
@@ -34,8 +49,20 @@ public class CustomAuthenticationSuccessHandler implements org.springframework.s
 
             long remainingSeconds = remaining.getSeconds();
             session.setAttribute("remainingSeconds", remainingSeconds);
-        }
 
-        response.sendRedirect("/");
+            try {
+                // wstoken 가져오기
+                String wstoken = coursemosService.getWstoken();
+                session.setAttribute("wstoken", wstoken);
+
+                // utoken 가져오기
+                String utoken = coursemosService.login(loginMember.getStuId(), loginMember.getIPassword(), wstoken);
+                session.setAttribute("utoken", utoken);
+
+                response.sendRedirect("/");
+            } catch (RuntimeException e) {
+                response.sendRedirect("/myPage/reset/iclassInfo?error=true");
+            }
+        }
     }
 }

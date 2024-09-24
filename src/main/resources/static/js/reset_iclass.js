@@ -35,14 +35,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             })
             .then(data => {
-                messageElement.innerText = data + '아래의 버튼을 클릭해 회원가입을 완료하세요!\n'; // 서버 응답 메시지 표시
+                messageElement.innerText = data + '아래의 버튼을 클릭해 계정 정보를 변경하세요!\n'; // 서버 응답 메시지 표시
 
                 // 버튼 추가
                 const button = document.createElement("button");
-                button.innerText = "회원가입 완료";
+                button.innerText = "I-Class 계정 정보 변경";
                 button.className = "bg-blue-600 text-white p-2 rounded mt-4"; // 버튼 스타일
                 button.onclick = function() {
-                    window.location.href = '/join/complete'; // 이동할 링크로 설정
+                    window.location.href = '/myPage/reset/iclassInfo/complete'; // 이동할 링크로 설정
                 };
                 messageElement.appendChild(button); // 버튼을 메시지 요소에 추가
             })
@@ -63,3 +63,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 });
+
+window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('error')) {
+        alert('I-Class 계정 연동 중 에러가 발생했습니다.\n유효한 계정 정보로 수정하세요!');
+    }
+};

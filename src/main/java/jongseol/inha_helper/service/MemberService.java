@@ -23,11 +23,20 @@ public class MemberService{
         memberRepository.save(joinRequest.toEntity(email, iclassForm));
     }
 
+    @Transactional
+    public void resetIclassInfo(Member member, IclassForm iclassForm) {
+        member.setIclassInfo(iclassForm.getStuId(), iclassForm.getPassword());
+    }
+
     public boolean checkLoginIdDuplicate(String loginId) {
         return memberRepository.existsByLoginId(loginId);
     }
 
     public Member findMemberByLoginId(String loginId) {
         return memberRepository.findMemberByLoginId(loginId);
+    }
+
+    public Member findMemberById(Long id) {
+        return memberRepository.findById(id).orElse(null);
     }
 }

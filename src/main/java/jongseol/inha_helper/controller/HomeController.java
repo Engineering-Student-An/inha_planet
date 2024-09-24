@@ -121,4 +121,12 @@ public class HomeController {
 
         return "redirect:/";
     }
+
+//    @ModelAttribute("loginMember")
+//    public Member loginMember(HttpSession session) {
+//        if(session.getAttribute("loginMember") != null) {
+//            return (Member) session.getAttribute("loginMember");
+//        }
+//        return null;
+//    }
 }

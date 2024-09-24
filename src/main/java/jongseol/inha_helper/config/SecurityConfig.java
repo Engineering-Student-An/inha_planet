@@ -1,6 +1,8 @@
 package jongseol.inha_helper.config;
 
+import jongseol.inha_helper.service.CoursemosService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +14,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -30,7 +35,7 @@ public class SecurityConfig {
                         .usernameParameter("loginId")
                         .passwordParameter("password")
                         .permitAll()
-                        .successHandler(new CustomAuthenticationSuccessHandler())
+                        .successHandler(customAuthenticationSuccessHandler)
                         .failureHandler(new CustomAuthenticationFailureHandler())
                 );
 
