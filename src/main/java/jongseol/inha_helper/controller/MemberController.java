@@ -13,6 +13,6 @@ public class MemberController {
 
     @GetMapping("/myPage")
     public String myPage() {
-        return "myPage";
+        return "member/myPage";
     }
 }
