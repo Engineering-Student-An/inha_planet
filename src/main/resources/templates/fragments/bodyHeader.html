@@ -1,23 +1,15 @@
 <div th:fragment="bodyHeader">
     <nav class="bg-gray-200 shadow-md py-4 w-full top-0 z-20">
         <div class="mx-2 px-4 flex justify-between items-center">
-            <div class="flex flex-row items-center">
-                <div id="toggle-button" class="toggle-button">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
-                <a href="/" class="logo"><img src="/img/logo.png" style="width: 100px; height: auto" alt="logo" class="h-8"/></a>
+            <a href="/" class="logo"><img src="/img/logo.png" style="width: 100px; height: auto" alt="logo" class="h-8"/></a>
+            <div th:if="${session.loginMember != null}" class="flex flex-row items-center">
+                <span class="material-symbols-outlined mr-1">timer</span>
+                <p class="text-sm mr-2"><span id="countdown" class="font-bold text-indigo-600"></span></p>
+                <button id="timer" class="block px-2 py-1 mr-2 text-xs text-white font-semibold rounded-lg bg-gray-500 hover:bg-gray-600">시간 연장</button>
+                <a href="/myPage" class="block px-3 py-2 mr-2 text-sm text-white font-semibold rounded-lg bg-blue-500 hover:bg-blue-600">마이페이지</a>
+                <a href="/logout" class="block px-3 py-2 text-sm text-white font-semibold rounded-lg bg-blue-500 hover:bg-blue-600">로그아웃</a>
             </div>
-
-            <div class="flex flex-row items-center">
-                <span th:if="${session.loginMember != null}" class="material-symbols-outlined mr-1">timer</span>
-                <p th:if="${session.loginMember != null}" class="text-sm mr-2"><span id="countdown" class="font-bold text-indigo-600"></span></p>
-                <button th:if="${session.loginMember != null}" id="timer" class="block px-2 py-1 mr-2 text-xs text-white font-semibold rounded-lg bg-gray-500 hover:bg-gray-600">시간 연장</button>
-                <a th:if="${session.loginMember == null}" href="/login" class="block px-3 py-2 text-sm text-white bg-gradient-to-r from-blue-500 to-blue-600 font-semibold rounded-lg transition duration-200 hover:bg-gradient-to-l hover:from-blue-900 hover:to-blue-700">로그인</a>
-                <a th:unless="${session.loginMember == null}" href="/logout" class="block px-3 py-2 text-sm text-white bg-gradient-to-r from-blue-500 to-blue-600 font-semibold rounded-lg transition duration-200 hover:bg-gradient-to-l hover:from-blue-900 hover:to-blue-700">로그아웃</a>
-            </div>
-
+            <a th:if="${session.loginMember == null}" href="/login" class="block px-3 py-2 text-sm text-white bg-gradient-to-r from-blue-500 to-blue-600 font-semibold rounded-lg transition duration-200 hover:bg-gradient-to-l hover:from-blue-900 hover:to-blue-700">로그인</a>
         </div>
 
     </nav>
