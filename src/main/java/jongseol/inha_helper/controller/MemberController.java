@@ -23,7 +23,9 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/myPage")
-    public String myPage() {
+    public String myPage(Model model) {
+        model.addAttribute("maskedIPassword", memberService.maskIPassword((Member) Objects.requireNonNull(model.getAttribute("loginMember"))));
+
         return "member/myPage";
     }
 

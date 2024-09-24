@@ -67,4 +67,9 @@ public class MemberService{
 
         memberRepository.save(updatedMember);
     }
+
+    public String maskIPassword(Member member) {
+
+        return "*".repeat(member.getIPassword().length());
+    }
 }
