@@ -1,10 +1,7 @@
 package jongseol.inha_helper.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
@@ -27,6 +24,7 @@ public class Member {
     // I-Class 계정 비밀번호
     private String iPassword;
 
+    @Setter
     private String email;
 
 

@@ -109,24 +109,14 @@ public class HomeController {
         return "error/errorMessage";
     }
 
-    @GetMapping("/logout")
-    public String logout(HttpServletRequest httpServletRequest) {
 
-        HttpSession httpSession = httpServletRequest.getSession(true);
 
-        if (httpSession != null) {
-            System.out.println("httpSession.getAttributeNames() = " + httpSession.getAttributeNames());
-            httpSession.invalidate();
+    @ModelAttribute("loginMember")
+    public Member loginMember(HttpSession session) {
+
+        if (session.getAttribute("loginMemberId") != null) {
+            return memberService.findMemberById((Long) session.getAttribute("loginMemberId"));
         }
-
-        return "redirect:/";
+        return null;
     }
-
-//    @ModelAttribute("loginMember")
-//    public Member loginMember(HttpSession session) {
-//        if(session.getAttribute("loginMember") != null) {
-//            return (Member) session.getAttribute("loginMember");
-//        }
-//        return null;
-//    }
 }

@@ -22,8 +22,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 
         http.authorizeHttpRequests((auth) -> auth
-//                        .requestMatchers("/info", "/", "/reload", "/schedule/add", "/style/**", "/period/**",
-//                                "/iclassInfo", "/email/**", "/videoLecture/**", "/assignment/**").authenticated()
+                        .requestMatchers("/myPage/**").authenticated()
                         .anyRequest().permitAll()
                 );
 

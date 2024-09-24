@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MemberService{
 
     private final MemberRepository memberRepository;
@@ -26,6 +27,11 @@ public class MemberService{
     @Transactional
     public void resetIclassInfo(Member member, IclassForm iclassForm) {
         member.setIclassInfo(iclassForm.getStuId(), iclassForm.getPassword());
+    }
+
+    @Transactional
+    public void resetEmail(Member member, String email) {
+        member.setEmail(email);
     }
 
     public boolean checkLoginIdDuplicate(String loginId) {

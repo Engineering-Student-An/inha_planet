@@ -34,6 +34,21 @@ public class ApiHomeController {
         return ResponseEntity.status(HttpStatus.OK).body("이메일 전송 완료\n\n\n\n" + emailRequest.getEmail() + "\n로 이메일을 전송했습니다.\n\n전송된 링크로 회원가입을 진행하세요!");
     }
 
+    @PostMapping("/reset/email")
+    public ResponseEntity<String> resetEmail(@RequestBody EmailRequest emailRequest, HttpSession session) {
+
+        String verifyCode = emailService.createVerifyCode();
+        try {
+            emailService.sendEmail(emailRequest.getEmail(), verifyCode, "email/resetEmail");
+            session.setAttribute("email", emailRequest.getEmail());
+            session.setAttribute("verifyCode", verifyCode);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이메일 전송에 실패\n\n\n\n유효한 이메일 주소인지 확인하세요!");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body("이메일 전송 완료\n\n\n\n" + emailRequest.getEmail() + "\n로 이메일을 전송했습니다.\n\n전송된 링크로 이메일 주소 변경을 완료하세요!");
+    }
+
     @PostMapping("/join/iclass")
     public ResponseEntity<String> loadIclassInfo(@RequestBody IclassForm iclassForm, HttpSession session) {
 

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<div style="margin:100px;">
+    <div style="text-align: center">
+        <h1>Inha Planet</h1>
+        <img src="/img/logo.png" alt="logo">
+    </div>
+    <br>
+    <h1>이메일 인증을 위해 아래 링크를 클릭해 이동해 주세요.</h1>
+    <br>
+
+    <div style="text-align:center; border:1px solid black; background-color: #aaaaaa">
+        <h3>이메일 인증 링크</h3>
+
+        <a th:href="@{http://localhost:8080/myPage/reset/email/{code}(code=${verifyCode})}" style="font-size: 200%">여기를 클릭해 이동하세요!</a>
+    </div>
+    <br/>
+</div>
+
+</body>
+</html>

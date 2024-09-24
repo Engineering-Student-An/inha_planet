@@ -35,13 +35,14 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
         if (principal instanceof CustomMemberDetails userDetails) {
             Member loginMember = userDetails.getMember();
+            Long loginMemberId = loginMember.getId();
 
             // 세션에 Member 정보 저장
             HttpSession session = request.getSession();
-            session.setAttribute("loginMember", loginMember);
+            session.setAttribute("loginMemberId", loginMemberId);
 
             // 세션 유효 시간 설정
-            session.setMaxInactiveInterval(30 * 60);
+            session.setMaxInactiveInterval(30 * 60 + 5);
 
             Instant now = Instant.now();
             Instant expires = Instant.ofEpochMilli(session.getLastAccessedTime() + session.getMaxInactiveInterval() * 1000L);
