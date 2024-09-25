@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jongseol.inha_helper.domain.Member;
 import jongseol.inha_helper.service.CoursemosService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -51,19 +50,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             long remainingSeconds = remaining.getSeconds();
             session.setAttribute("remainingSeconds", remainingSeconds);
 
-            try {
-                // wstoken 가져오기
-                String wstoken = coursemosService.getWstoken();
-                session.setAttribute("wstoken", wstoken);
-
-                // utoken 가져오기
-                String utoken = coursemosService.login(loginMember.getStuId(), loginMember.getIPassword(), wstoken);
-                session.setAttribute("utoken", utoken);
-
-                response.sendRedirect("/");
-            } catch (RuntimeException e) {
-                response.sendRedirect("/myPage/reset/iclassInfo?error=true");
-            }
+            response.sendRedirect("/coursemos/reload");
         }
     }
 }

@@ -3,6 +3,9 @@ package jongseol.inha_helper.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Builder
@@ -27,6 +30,14 @@ public class Member {
     @Setter
     private String email;
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MemberAssignment> memberAssignments = new ArrayList<>();
+
+
+    // 수강 과목 리스트
+    @Setter
+    @ElementCollection
+    private List<Long> subjectList = new ArrayList<>();
 
     // I-Class 정보 설정
     public void setIclassInfo(String stuId, String iPassword) {

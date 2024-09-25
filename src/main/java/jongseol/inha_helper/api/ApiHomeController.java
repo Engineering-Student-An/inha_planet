@@ -71,6 +71,7 @@ public class ApiHomeController {
 
     @PostMapping("/timer")
     public ResponseEntity<Void> timer(HttpSession session) {
+
         if (session != null) {
             // 세션 유효 시간을 30분으로 갱신
             session.setMaxInactiveInterval(1800);  // 30분

@@ -1,7 +1,6 @@
 package jongseol.inha_helper.service;
 
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.Size;
 import jongseol.inha_helper.domain.Member;
 import jongseol.inha_helper.domain.dto.IclassForm;
 import jongseol.inha_helper.domain.dto.JoinRequest;
@@ -9,6 +8,9 @@ import jongseol.inha_helper.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -66,6 +68,12 @@ public class MemberService{
                 .email(member.getEmail()).build();
 
         memberRepository.save(updatedMember);
+    }
+
+    // 수강중인 과목 설정
+    @Transactional
+    public void setSubject(Member member, List<Long> subjectIds) {
+        member.setSubjectList(subjectIds);
     }
 
     public String maskIPassword(Member member) {

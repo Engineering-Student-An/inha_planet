@@ -4,15 +4,18 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jongseol.inha_helper.domain.Member;
 import jongseol.inha_helper.domain.dto.IclassForm;
-import jongseol.inha_helper.domain.dto.JoinRequest;
 import jongseol.inha_helper.domain.dto.PasswordRequest;
 import jongseol.inha_helper.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Objects;
 
@@ -39,7 +42,7 @@ public class MemberController {
     public String resetIclassInfo(HttpSession session, Model model) {
         memberService.resetIclassInfo((Member) Objects.requireNonNull(model.getAttribute("loginMember")), (IclassForm) session.getAttribute("iclassForm"));
 
-        return "redirect:/myPage";
+        return "loading";
     }
 
     @GetMapping("/myPage/reset/email")
@@ -87,13 +90,16 @@ public class MemberController {
         }
 
         memberService.resetPassword(loginMember, passwordRequest.getPassword());
-        return "redirect:/myPage";
+
+        model.addAttribute("nextUrl", "/myPage");
+        model.addAttribute("errorMessage", "비밀번호 변경을 완료했습니다!");
+        return "error/errorMessage";
     }
 
     @ModelAttribute("loginMember")
-    public Member loginMember(HttpSession session) {
+    public Member loginMember(HttpSession session, SecurityContext context) {
 
-        if (session.getAttribute("loginMemberId") != null) {
+        if (session.getAttribute("loginMemberId") != null && !context.getAuthentication().getName().equals("anonymousUser")) {
             return memberService.findMemberById((Long) session.getAttribute("loginMemberId"));
         }
         return null;

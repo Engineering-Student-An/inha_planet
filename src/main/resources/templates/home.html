@@ -6,13 +6,17 @@
 
 <div id="wrap">
     <!--이 div 태그 안에 본문 작성하시면 됩니다!-->
-    <div>aa</div>
-    <div>aa</div>
+
     <div th:unless="${loginMember==null}">
         <p th:text="${loginMember.name}"></p>
     </div>
     <div th:if="${loginMember==null}">
         로그인하셈!
+    </div>
+
+    <p>수강 중인 강의 id</p>
+    <div th:each="courseId : ${courseIds}">
+        <p th:text="${courseId}"></p>
     </div>
 </div>
 

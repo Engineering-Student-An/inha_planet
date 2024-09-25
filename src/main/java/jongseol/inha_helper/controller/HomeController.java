@@ -7,26 +7,45 @@ import jongseol.inha_helper.domain.Member;
 import jongseol.inha_helper.domain.dto.IclassForm;
 import jongseol.inha_helper.domain.dto.JoinRequest;
 import jongseol.inha_helper.domain.dto.LoginRequest;
+import jongseol.inha_helper.service.AssignmentService;
+import jongseol.inha_helper.service.CoursemosService;
 import jongseol.inha_helper.service.MemberService;
+import jongseol.inha_helper.service.SubjectService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+
 
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
 
     private final MemberService memberService;
+    private final SubjectService subjectService;
+    private final AssignmentService assignmentService;
+    private final CoursemosService coursemosService;
 
     @GetMapping("/")
-    public String home(SecurityContext context) {
+    public String home(Model model, HttpSession session) {
 
-        System.out.println(" = " + context.getAuthentication().getName());
+        Member loginMember = (Member) model.getAttribute("loginMember");
+
+        if(loginMember != null) {
+            // 오늘의 강의를 모델에 추가
+            model.addAttribute("todaySubjects", subjectService.getTodaySubjects(loginMember));
+            // 남은 과제를 모델에 추가
+            model.addAttribute("remainAssignments", assignmentService.getRemainAssignments(loginMember));
+
+            model.addAttribute("courseIds", coursemosService.getCourseIds(loginMember, session));
+        }
+
 
         return "home";
     }
@@ -91,13 +110,15 @@ public class HomeController {
     }
 
     @GetMapping("/join/complete")
-    public String joinComplete(HttpSession session, HttpServletRequest request) {
+    public String joinComplete(HttpSession session, HttpServletRequest request, Model model) {
 
         memberService.join((JoinRequest) session.getAttribute("joinRequest"),
                 (String) request.getSession().getAttribute("email"),
                 (IclassForm) session.getAttribute("iclassForm"));
 
-        return "redirect:/login";
+        model.addAttribute("errorMessage", "회원가입을 완료했습니다!\n로그인 페이지로 이동합니다.");
+        model.addAttribute("nextUrl", "/login");
+        return "error/errorMessage";
     }
 
     @GetMapping("/login/error")
@@ -109,12 +130,15 @@ public class HomeController {
         return "error/errorMessage";
     }
 
-
+    @GetMapping("/coursemos/reload")
+    public String afterLogin() {
+        return "loading";
+    }
 
     @ModelAttribute("loginMember")
-    public Member loginMember(HttpSession session) {
+    public Member loginMember(HttpSession session, SecurityContext context) {
 
-        if (session.getAttribute("loginMemberId") != null) {
+        if (session.getAttribute("loginMemberId") != null && !context.getAuthentication().getName().equals("anonymousUser")) {
             return memberService.findMemberById((Long) session.getAttribute("loginMemberId"));
         }
         return null;

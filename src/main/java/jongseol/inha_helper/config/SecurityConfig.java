@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -40,11 +41,17 @@ public class SecurityConfig {
 
         http
                 .logout((auth) -> auth
-                        .logoutUrl("/logout"));
+                        .logoutUrl("/logout")
+                        .invalidateHttpSession(true));
 
 
         http
                 .csrf((auth) -> auth.disable());
+
+//        http
+//                .csrf((csrf) -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+//                        .ignoringRequestMatchers("/api/**")
+//                );
 
         return http.build();
     }
