@@ -19,7 +19,7 @@ public class MemberAssignmentService {
     private final AssignmentService assignmentService;
 
     @Transactional
-    public void findAndSave(Member loginMember) {
+    public void resetMemberAssignment(Member loginMember) {
         Long memberId = loginMember.getId();
         // 로그인한 멤버의 수강 과목 리스트
         List<Long> subjects = loginMember.getSubjectList();
@@ -37,7 +37,19 @@ public class MemberAssignmentService {
             }
         }
 
+        // 수강 중인 강의 리스트에 없는 경우 삭제
+        List<MemberAssignment> memberAssignmentsByMemberId = memberAssignmentRepository.findMemberAssignmentsByMember_Id(loginMember.getId());
+        for (MemberAssignment memberAssignment : memberAssignmentsByMemberId) {
+            // 멤버 id 로 조회한 멤버-과제 엔티티의 과목 id가 수강중인 과목 리스트에 없다면 삭제 진행
+            if(!subjects.contains(memberAssignment.getAssignment().getSubject().getId())) {
+                delete(memberAssignment);
+            }
+        }
+    }
 
+    @Transactional
+    public void delete(MemberAssignment memberAssignment) {
+        memberAssignmentRepository.delete(memberAssignment);
     }
 
     @Transactional

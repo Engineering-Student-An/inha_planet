@@ -41,7 +41,7 @@ public class HomeController {
             // 오늘의 강의를 모델에 추가
             model.addAttribute("todaySubjects", subjectService.getTodaySubjects(loginMember));
 
-            memberAssignmentService.findAndSave(loginMember);
+            memberAssignmentService.resetMemberAssignment(loginMember);
 
             // 남은 과제를 모델에 추가
             model.addAttribute("remainAssignments", memberAssignmentService.findByCompletedAndMemberId(false, loginMember.getId()));
