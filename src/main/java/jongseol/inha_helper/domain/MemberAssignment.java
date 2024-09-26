@@ -20,17 +20,17 @@ public class MemberAssignment {
     private Long id;
 
     // 과제
-    @ManyToOne
-    @JoinColumn(name = "assignment_web_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "web_id")
     private Assignment assignment;
 
-    // 학생 id
-    @ManyToOne
+    // 멤버 id
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
     // 완료 여부
-    private boolean completed;
+    private boolean completed = false;
 
     public void setMember(Member member) {
         this.member = member;

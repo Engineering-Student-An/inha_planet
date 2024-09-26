@@ -7,8 +7,8 @@ import jongseol.inha_helper.domain.Member;
 import jongseol.inha_helper.domain.dto.IclassForm;
 import jongseol.inha_helper.domain.dto.JoinRequest;
 import jongseol.inha_helper.domain.dto.LoginRequest;
-import jongseol.inha_helper.service.AssignmentService;
 import jongseol.inha_helper.service.CoursemosService;
+import jongseol.inha_helper.service.MemberAssignmentService;
 import jongseol.inha_helper.service.MemberService;
 import jongseol.inha_helper.service.SubjectService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class HomeController {
 
     private final MemberService memberService;
     private final SubjectService subjectService;
-    private final AssignmentService assignmentService;
+    private final MemberAssignmentService memberAssignmentService;
     private final CoursemosService coursemosService;
 
     @GetMapping("/")
@@ -40,8 +40,11 @@ public class HomeController {
         if(loginMember != null) {
             // 오늘의 강의를 모델에 추가
             model.addAttribute("todaySubjects", subjectService.getTodaySubjects(loginMember));
+
+            memberAssignmentService.findAndSave(loginMember);
+
             // 남은 과제를 모델에 추가
-            model.addAttribute("remainAssignments", assignmentService.getRemainAssignments(loginMember));
+            model.addAttribute("remainAssignments", memberAssignmentService.findByCompletedAndMemberId(false, loginMember.getId()));
 
             model.addAttribute("courseIds", coursemosService.getCourseIds(loginMember, session));
         }
@@ -136,8 +139,9 @@ public class HomeController {
     }
 
     @ModelAttribute("loginMember")
-    public Member loginMember(HttpSession session, SecurityContext context) {
+    public Member loginMember(HttpServletRequest request, SecurityContext context) {
 
+        HttpSession session = request.getSession();
         if (session.getAttribute("loginMemberId") != null && !context.getAuthentication().getName().equals("anonymousUser")) {
             return memberService.findMemberById((Long) session.getAttribute("loginMemberId"));
         }

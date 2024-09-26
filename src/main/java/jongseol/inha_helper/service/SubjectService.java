@@ -1,11 +1,14 @@
 package jongseol.inha_helper.service;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jongseol.inha_helper.domain.Member;
 import jongseol.inha_helper.domain.Subject;
 import jongseol.inha_helper.domain.dto.SubjectResponseDto;
 import jongseol.inha_helper.repository.SubjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -21,9 +24,12 @@ import static jongseol.inha_helper.domain.dto.KoreanDay.getKoreanDayOfWeek;
 @Transactional
 public class SubjectService {
 
+    @PersistenceContext
+    private final EntityManager em;
+
     private final SubjectRepository subjectRepository;
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void save(Long id, String code, String name, String day, String hour) {
 
         String[] splitCode = code.split("_");
@@ -36,10 +42,7 @@ public class SubjectService {
             if(!splitDay[i].equals("WEB")) {
                 String[] splitHour2 = splitHour[i].split("~");
                 time.add(splitDay[i] + transformTime(Integer.parseInt(splitHour2[0])) + "~" + transformTime(Integer.parseInt(splitHour2[1])+1));
-            }
-
-            // 웹강 과목인 경우
-            else {
+            } else { // 웹강 과목인 경우
                 time.add("WEB");
                 break;
             }
@@ -52,6 +55,8 @@ public class SubjectService {
                 .time(time).build();
 
         subjectRepository.save(subject);
+        em.flush();
+        em.clear();
     }
 
     public boolean existsById(Long id) {

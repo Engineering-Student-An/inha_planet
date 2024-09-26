@@ -18,7 +18,11 @@ import java.util.List;
 @NoArgsConstructor
 public class Assignment {
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "assignment_id")
+    private Long id;
+
+    // 과제 고유 번호
     private Long webId;
 
     // 과목 이름

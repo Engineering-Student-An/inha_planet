@@ -18,6 +18,12 @@
     <div th:each="courseId : ${courseIds}">
         <p th:text="${courseId}"></p>
     </div>
+
+    <p>남은 과제</p>
+    <div th:each="assignment : ${remainAssignments}">
+        <p th:text="${assignment.getAssignment().getName()}"></p>
+        <p th:text="${assignment.getAssignment().getDeadline()}"></p>
+    </div>
 </div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>

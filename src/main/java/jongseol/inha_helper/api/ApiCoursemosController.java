@@ -32,22 +32,27 @@ public class ApiCoursemosController {
         Member loginMember = (Member) model.getAttribute("loginMember");
 
         Map<String, String> response = new HashMap<>();
-
         try {
             // wstoken 가져오기
-            session.setAttribute("wstoken", coursemosService.getWstoken());
+            String wstoken = coursemosService.getWstoken();
+            session.setAttribute("wstoken", wstoken);
 
             // utoken 가져오기
-            session.setAttribute("utoken", coursemosService.login(Objects.requireNonNull(loginMember).getStuId(), loginMember.getIPassword(), coursemosService.getWstoken()));
+            String utoken = coursemosService.login(Objects.requireNonNull(loginMember).getStuId(), loginMember.getIPassword(), wstoken);
+            session.setAttribute("utoken", utoken);
+
+            // 통합
+            coursemosService.reloadAll(utoken, loginMember, session);
 
             response.put("nextUrl", "/");
-            response.put("message", "I-Class 정보를 성공적으로 불러왔습니다!");
             return ResponseEntity.ok(response);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
+            System.out.println("e.getMessage() = " + e.getMessage());
             response.put("nextUrl", "/myPage/reset/iclassInfo?error=true");
             response.put("message", "I-Class 계정 연동 중 오류가 발생했습니다!\n");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
+
     }
 
     @ModelAttribute("loginMember")

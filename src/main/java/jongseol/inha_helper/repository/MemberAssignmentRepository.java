@@ -11,11 +11,10 @@ public interface MemberAssignmentRepository extends JpaRepository<MemberAssignme
 
     boolean existsMemberAssignmentByAssignment_WebId(Long webId);
 
-    boolean existsMemberAssignmentByAssignment_WebIdAndMemberId(Long webId, Long memberId);
 
-    List<MemberAssignment> findMemberAssignmentsByCompletedAndMemberId(boolean completed, Long memberId);
+    boolean existsMemberAssignmentByAssignment_IdAndMember_Id(Long webId, Long memberId);
 
-    MemberAssignment findMemberAssignmentByAssignment_WebId(Long webId);
+    List<MemberAssignment> findMemberAssignmentsByCompletedAndMember_Id(boolean completed, Long memberId);
 
     MemberAssignment findMemberAssignmentByAssignment_WebIdAndMemberId(Long webId, Long memberId);
 

@@ -8,7 +8,6 @@ function hideLoading() {
 
 function displayError(data) {
 
-    console.log("data = " + data);
     const errorMessageDiv = document.getElementById('errorMessage');
     document.getElementById('errorText').innerText = data.message;
     errorMessageDiv.style.display = 'block';
@@ -45,11 +44,9 @@ function submitAndReload() {
         })
         .then(data => {
             hideLoading();
-            console.log(data);
-            console.log(data.nextUrl);
             window.location.href = data.nextUrl;
         })
-        .catch((error) => {
+        .catch(error => {
             hideLoading();
             displayError(responseData);
         });

@@ -1,5 +1,6 @@
 package jongseol.inha_helper.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jongseol.inha_helper.domain.Member;
@@ -97,8 +98,9 @@ public class MemberController {
     }
 
     @ModelAttribute("loginMember")
-    public Member loginMember(HttpSession session, SecurityContext context) {
+    public Member loginMember(HttpServletRequest request, SecurityContext context) {
 
+        HttpSession session = request.getSession();
         if (session.getAttribute("loginMemberId") != null && !context.getAuthentication().getName().equals("anonymousUser")) {
             return memberService.findMemberById((Long) session.getAttribute("loginMemberId"));
         }
