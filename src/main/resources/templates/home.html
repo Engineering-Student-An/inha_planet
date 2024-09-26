@@ -1,11 +1,12 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" >
 <head th:replace="~{fragments/header :: header}"></head>
+<link rel="stylesheet" href="/css/post-it.css"/>
+<link rel="stylesheet" href="/css/jelly-check-box.css"/>
 <body class="flex flex-col">
 <div th:replace="~{fragments/bodyHeader :: bodyHeader}"></div>
 
 <div id="wrap">
-    <!--이 div 태그 안에 본문 작성하시면 됩니다!-->
 
     <div th:unless="${loginMember==null}">
         <p th:text="${loginMember.name}"></p>
@@ -20,13 +21,59 @@
         <p th:text="${subject.time}"></p>
     </div>
 
-    <p>남은 과제</p>
-    <div th:each="assignment : ${remainAssignments}">
-        <p th:text="${assignment.assignment.name}"></p>
-        <p th:text="${assignment.assignment.deadline}"></p>
+    <div class="rgyPostIt">
+        <h2 class="mb-2"><span class="material-symbols-outlined" style="font-size: 30px">assignment</span> 아직 제출하지 않은 과제</h2>
+        <div th:each="assignment : ${remainAssignments}">
+            <label class='checkbox'>
+                <input type="checkbox" th:attr="data-id=${assignment.getId()}" onclick="confirmComplete(this)"/>
+                <span class="icon"></span>
+            </label>
+
+
+            <p th:text="${assignment.assignment.name}"></p>
+            <p th:text="${assignment.assignment.deadline}"></p>
+        </div>
     </div>
 </div>
-
 <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
+<script>
+    function confirmComplete(element) {
+        // 체크박스 상태에 따라 처리
+        if (element.checked) {
+            var assignId = element.getAttribute('data-id');
+
+            console.log(assignId);
+            // 1초 대기 후 POST 요청
+            setTimeout(() => {
+                const confirmed = confirm("완료하시겠습니까?");
+
+                if (confirmed) {
+                    fetch(`/api/assignment/${assignId}/complete`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                return response.text();
+                            } else {
+                                throw new Error();
+                            }
+                        })
+                        .then(message => {
+                            alert(message); // 서버에서 반환된 메시지 출력
+                            location.reload();
+                        })
+                } else {
+                    // 체크박스 상태를 원래대로 돌리기
+                    element.checked = false;
+                    // 리다이렉트
+                    location.reload();
+                }
+            }, 1000); // 1000ms = 1초
+        }
+    }
+</script>
 </html>

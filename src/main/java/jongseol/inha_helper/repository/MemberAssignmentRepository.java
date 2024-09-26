@@ -17,7 +17,8 @@ public interface MemberAssignmentRepository extends JpaRepository<MemberAssignme
     List<MemberAssignment> findMemberAssignmentsByCompletedAndMember_Id(boolean completed, Long memberId);
 
     List<MemberAssignment> findMemberAssignmentsByMember_Id(Long memberId);
-    MemberAssignment findMemberAssignmentByAssignment_WebIdAndMemberId(Long webId, Long memberId);
+    MemberAssignment findMemberAssignmentByAssignment_IdAndMember_Id(Long assignId, Long memberId);
 
     List<MemberAssignment> findMemberAssignmentsByCompleted(boolean completed);
+
 }

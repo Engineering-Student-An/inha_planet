@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -72,8 +73,14 @@ public class MemberAssignmentService {
     }
 
     @Transactional
-    public void setCompleted(Long webId, Long memberId) {
-        memberAssignmentRepository.findMemberAssignmentByAssignment_WebIdAndMemberId(webId, memberId).setCompleted();
+    public void setCompleted(Long memberAssignmentId) {
+
+        Optional<MemberAssignment> memberAssignment = memberAssignmentRepository.findById(memberAssignmentId);
+
+        if(memberAssignment.isEmpty()) {
+            throw new RuntimeException("완료 처리 도중 에러가 발생했습니다!\n다시 시도해주세요.");
+        }
+        memberAssignment.get().setCompleted();
     }
 
     // 남은 과제 반환
