@@ -46,7 +46,6 @@ public class HomeController {
             // 남은 과제를 모델에 추가
             model.addAttribute("remainAssignments", memberAssignmentService.findByCompletedAndMemberId(false, loginMember.getId()));
 
-            model.addAttribute("courseIds", coursemosService.getCourseIds(loginMember, session));
         }
 
 

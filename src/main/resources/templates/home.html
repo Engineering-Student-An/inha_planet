@@ -14,15 +14,16 @@
         로그인하셈!
     </div>
 
-    <p>수강 중인 강의 id</p>
-    <div th:each="courseId : ${courseIds}">
-        <p th:text="${courseId}"></p>
+    <p>오늘의 강의</p>
+    <div th:each="subject : ${todaySubjects}">
+        <p th:text="${subject.name}"></p>
+        <p th:text="${subject.time}"></p>
     </div>
 
     <p>남은 과제</p>
     <div th:each="assignment : ${remainAssignments}">
-        <p th:text="${assignment.getAssignment().getName()}"></p>
-        <p th:text="${assignment.getAssignment().getDeadline()}"></p>
+        <p th:text="${assignment.assignment.name}"></p>
+        <p th:text="${assignment.assignment.deadline}"></p>
     </div>
 </div>
 
