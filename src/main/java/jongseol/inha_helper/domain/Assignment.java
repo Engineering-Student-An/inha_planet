@@ -47,4 +47,9 @@ public class Assignment {
         this.subject = subject;
         subject.getAssignments().add(this);
     }
+
+    public Assignment (String name, LocalDateTime deadline) {
+        this.name = name;
+        this.deadline = deadline;
+    }
 }

@@ -4,9 +4,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jongseol.inha_helper.domain.Member;
+import jongseol.inha_helper.domain.MemberAssignment;
 import jongseol.inha_helper.domain.dto.IclassForm;
 import jongseol.inha_helper.domain.dto.JoinRequest;
 import jongseol.inha_helper.domain.dto.LoginRequest;
+import jongseol.inha_helper.domain.dto.RemainingAssignmentDto;
 import jongseol.inha_helper.service.CoursemosService;
 import jongseol.inha_helper.service.MemberAssignmentService;
 import jongseol.inha_helper.service.MemberService;
@@ -21,6 +23,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -42,14 +49,31 @@ public class HomeController {
             model.addAttribute("todaySubjects", subjectService.getTodaySubjects(loginMember));
 
             memberAssignmentService.resetMemberAssignment(loginMember);
-
             // 남은 과제를 모델에 추가
-            model.addAttribute("remainAssignments", memberAssignmentService.findByCompletedAndMemberId(false, loginMember.getId()));
+            List<RemainingAssignmentDto> remainingAssignmentDtos = new ArrayList<>();
+
+            List<MemberAssignment> memberAssignments = memberAssignmentService.findByCompletedAndMemberId(false, loginMember.getId());
+            for (MemberAssignment memberAssignment : memberAssignments) {
+                remainingAssignmentDtos.add(RemainingAssignmentDto.builder()
+                        .memberAssignmentId(memberAssignment.getId())
+                        .name(memberAssignment.getAssignment().getName())
+                        .subjectName(memberAssignment.getAssignment().getSubject().getName())
+                        .assignmentType(memberAssignment.getAssignment().getAssignmentType().getDisplayName())
+                        .remainingSeconds(Duration.between(LocalDateTime.now(), memberAssignment.getAssignment().getDeadline()).getSeconds())
+                        .build());
+            }
+            model.addAttribute("remainAssignments", remainingAssignmentDtos);
 
         }
 
 
         return "home";
+    }
+
+    private String formatDuration(Duration duration) {
+        long hours = duration.toHours();
+        long minutes = duration.toMinutes() % 60;
+        return hours + "시간 " + minutes + "분 남음";
     }
 
     @GetMapping("/login")
