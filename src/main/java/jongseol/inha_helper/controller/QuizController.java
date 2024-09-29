@@ -28,6 +28,11 @@ public class QuizController {
         return "quiz";
     }
 
+    @GetMapping("/loading")
+    public String loading() {
+
+        return "loadingQuiz";
+    }
 
 
     @GetMapping("/list")

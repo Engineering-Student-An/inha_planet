@@ -3,12 +3,16 @@ package jongseol.inha_helper.service;
 import jongseol.inha_helper.domain.Assignment;
 import jongseol.inha_helper.domain.Member;
 import jongseol.inha_helper.domain.MemberAssignment;
+import jongseol.inha_helper.domain.dto.RemainingAssignmentDto;
 import jongseol.inha_helper.repository.MemberAssignmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +22,23 @@ public class MemberAssignmentService {
 
     private final MemberAssignmentRepository memberAssignmentRepository;
     private final AssignmentService assignmentService;
+
+    public List<RemainingAssignmentDto> getRemainingAssignmentDtos(Member loginMember) {
+        List<RemainingAssignmentDto> remainingAssignmentDtos = new ArrayList<>();
+
+        List<MemberAssignment> memberAssignments = findByCompletedAndMemberId(false, loginMember.getId());
+        for (MemberAssignment memberAssignment : memberAssignments) {
+            remainingAssignmentDtos.add(RemainingAssignmentDto.builder()
+                    .memberAssignmentId(memberAssignment.getId())
+                    .name(memberAssignment.getAssignment().getName())
+                    .subjectName(memberAssignment.getAssignment().getSubject().getName())
+                    .assignmentType(memberAssignment.getAssignment().getAssignmentType().getDisplayName())
+                    .remainingSeconds(Duration.between(LocalDateTime.now(), memberAssignment.getAssignment().getDeadline()).getSeconds())
+                    .build());
+        }
+
+        return remainingAssignmentDtos;
+    }
 
     @Transactional
     public void resetMemberAssignment(Member loginMember) {

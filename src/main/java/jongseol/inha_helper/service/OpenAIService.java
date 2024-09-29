@@ -14,7 +14,6 @@ import org.json.JSONObject;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,9 +30,9 @@ public class OpenAIService {
 
     private final RestTemplate restTemplate;
 
-    public QuizListDto quiz(QuizRequestDto quizRequestDto) {
+    public QuizListDto quiz(QuizRequestDto quizRequestDto, byte[] lectureNoteData) {
 
-        String lectureNote = parsePdfToString(quizRequestDto.getLectureNote());
+        String lectureNote = parseFileToString(lectureNoteData);
 
         System.out.println("lectureNote = " + lectureNote);
 
@@ -106,12 +105,10 @@ public class OpenAIService {
         throw new OpenAIServiceException("챗gpt api 호출 중 예외가 발생했습니다!");
     }
 
-    private String parsePdfToString(MultipartFile lectureNote) {
-        try {
-            PDDocument document = PDDocument.load(lectureNote.getInputStream());
+    private String parseFileToString(byte[] lectureNoteBytes) {
+        try (PDDocument document = PDDocument.load(lectureNoteBytes)) {
             PDFTextStripper pdfStripper = new PDFTextStripper();
             String text = pdfStripper.getText(document);
-            document.close();
 
             // 개행문자를 띄어쓰기로 변환
             text = text.replaceAll("\\r?\\n", " ");
@@ -119,7 +116,7 @@ public class OpenAIService {
             return text;
 
         } catch (IOException e) {
-            throw new ConvertPdfToStringException("pdf를 문자열로 변환하는 과정에서 예외가 발생했습니다!");
+            throw new ConvertPdfToStringException("파일을 문자열로 변환하는 과정에서 예외가 발생했습니다!");
         }
     }
 

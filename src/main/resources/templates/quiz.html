@@ -16,7 +16,7 @@
 
         <h2>챗gpt가 말아주는 예상 시험문제</h2>
 
-        <form th:if="${loginMember!=null}" class="mt-5 mb-5" th:action="@{/api/quiz}" th:object="${quizRequestDto}" method="post" enctype="multipart/form-data">
+        <form th:if="${loginMember!=null}" class="mt-5 mb-5" th:action="@{/api/quiz/loading}" th:object="${quizRequestDto}" method="post" enctype="multipart/form-data">
             <div class="flex justify-center">
                 <div class="w-[50%] mr-10">
                     <input type="file" th:field="*{lectureNote}" id="file-input" class="hidden" onchange="checkTotal()" />

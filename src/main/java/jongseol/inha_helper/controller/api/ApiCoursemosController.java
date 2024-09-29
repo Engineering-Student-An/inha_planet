@@ -47,7 +47,6 @@ public class ApiCoursemosController {
             response.put("nextUrl", "/");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            System.out.println("e.getMessage() = " + e.getMessage());
             response.put("nextUrl", "/myPage/reset/iclassInfo?error=true");
             response.put("message", "I-Class 계정 연동 중 오류가 발생했습니다!\n");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);

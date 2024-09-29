@@ -41,12 +41,13 @@ $(document).ready(function() {
             data: formData,
             processData: false, // FormData를 처리하지 않음
             contentType: false, // 콘텐츠 타입을 자동으로 설정
+
             success: function(response, textStatus, xhr) {
                 // 상태 코드가 CREATED인 경우
-                if (xhr.status === 201) {
+                if (xhr.status === 200) {
                     // quizRequestDto의 값을 쿼리 파라미터로 URL에 추가
-                    alert(xhr.responseText);
-                    window.open('/quiz/list', '_blank'); // 새로운 탭에서 다음 URL 열기
+                    console.log(response);
+                    window.location.href=response;
                 }
             },
             error: function(xhr) {
