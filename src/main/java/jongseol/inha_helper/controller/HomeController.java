@@ -40,7 +40,7 @@ public class HomeController {
     private final CoursemosService coursemosService;
 
     @GetMapping("/")
-    public String home(Model model, HttpSession session) {
+    public String home(Model model) {
 
         Member loginMember = (Member) model.getAttribute("loginMember");
 
@@ -70,11 +70,6 @@ public class HomeController {
         return "home";
     }
 
-    private String formatDuration(Duration duration) {
-        long hours = duration.toHours();
-        long minutes = duration.toMinutes() % 60;
-        return hours + "시간 " + minutes + "분 남음";
-    }
 
     @GetMapping("/login")
     public String login(Model model) {

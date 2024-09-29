@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="~{fragments/header :: header}"></head>
+<link rel="stylesheet" href="/css/black_board.css"/>
+<link rel="stylesheet" href="/css/left_right_button.css"/>
+<link rel="stylesheet" href="/css/modal.css"/>
+<body class="flex flex-col">
+<div th:replace="~{fragments/bodyHeader :: bodyHeader}"></div>
+<div id="wrap" class="flex flex-row justify-center items-center">
+
+    <div class="container w-[80%]">
+        <div class="board-tools">
+            <div class="pen"></div>
+            <div class="eraser">지우개<div class="eraser-bg"></div>
+            </div>
+        </div>
+
+        <div class="flex flex-row justify-between items-center mb-10">
+            <h2>챗gpt가 말아주는 예상 시험문제</h2>
+            <a href="/quiz" class="px-4 py-2 mb-2 bg-blue-500 text-white rounded-lg cursor-pointer hover:bg-blue-600 transition duration-300 ">다시 생성하기</a>
+        </div>
+
+
+        <div class="flex flex-col mb-10">
+            <div th:if="${quizList.oxQuestions.size()>0}" class="mb-6">
+                <div class="flex flex-row justify-between">
+                    <h3 class="mb-6">O / X 문제</h3>
+                </div>
+
+                <div th:each="question : ${quizList.oxQuestions}" class="flex flex-row justify-between mb-6">
+                    <p th:utext="${question.question} + '<br>&nbsp&nbsp&nbsp&nbspO / X'"></p>
+                </div>
+            </div>
+
+            <div th:if="${quizList.multipleChoiceQuestions.size()>0}" class="mb-6">
+                <hr class="mb-6"/>
+                <h3 class="mb-6">객관식 문제</h3>
+                <div th:each="question : ${quizList.multipleChoiceQuestions}" class="mb-6">
+                    <p th:text="${question.question}"></p>
+                    <div th:each="choice : ${question.choices}">
+                        <p th:utext="${'&nbsp&nbsp&nbsp&nbsp' + choice}"></p>
+                    </div>
+                </div>
+
+            </div>
+            <div th:if="${quizList.shortAnswerQuestions.size()>0}" class="mb-6">
+                <hr class="mb-6"/>
+                <h3 class="mb-6">단답식 문제</h3>
+                <div th:each="question : ${quizList.shortAnswerQuestions}" class="flex flex-row justify-between mb-6">
+                    <p th:text="${question.question}"></p>
+                </div>
+            </div>
+
+            <button class="mt-10 mb-10 px-4 py-2 mb-2 bg-blue-500 text-white rounded-lg cursor-pointer hover:bg-blue-600 transition duration-300" onclick="openModal(this)" th:data-answers="${quizList.answers}">정답 확인</button>
+        </div>
+    </div>
+
+    <!-- 모달 -->
+    <div id="myModal" class="modal">
+        <div class="modal-content" style="width: auto; height: auto;">
+            <span class="close">&times;</span>
+            <p id="message">정답 확인</p>
+            <p id="answerText" style="padding: 50px 150px;"></p>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/js/quiz_answers.js"></script>
+</html>

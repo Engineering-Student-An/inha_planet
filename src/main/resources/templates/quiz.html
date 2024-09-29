@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="~{fragments/header :: header}"></head>
+<link rel="stylesheet" href="/css/black_board.css"/>
+<link rel="stylesheet" href="/css/left_right_button.css"/>
+<body class="flex flex-col">
+<div th:replace="~{fragments/bodyHeader :: bodyHeader}"></div>
+<div id="wrap" class="flex flex-row justify-center items-center">
+
+    <div class="container w-[80%]">
+        <div class="board-tools">
+            <div class="pen"></div>
+            <div class="eraser">지우개<div class="eraser-bg"></div>
+            </div>
+        </div>
+
+        <h2>챗gpt가 말아주는 예상 시험문제</h2>
+
+        <form th:if="${loginMember!=null}" class="mt-5 mb-5" th:action="@{/api/quiz}" th:object="${quizRequestDto}" method="post" enctype="multipart/form-data">
+            <div class="flex justify-center">
+                <div class="w-[50%] mr-10">
+                    <input type="file" th:field="*{lectureNote}" id="file-input" class="hidden" onchange="checkTotal()" />
+                    <span style="font-size: 20px;" class="text-gray-500 mb-2 block">파일은 최대 10MB, pdf 확장자만 업로드 가능</span>
+
+                    <!-- 업로드 된 파일 이름 -->
+                    <div id="error-file" class="text-red-500 mb-4">파일이 선택되지 않았습니다.</div>
+                    <div id="file-info" class="mb-4 text-gray-300"></div>
+
+                    <div>
+                        <label for="file-input" class="px-4 py-4 mb-2 bg-blue-500 text-white rounded-lg cursor-pointer hover:bg-blue-600 transition duration-300">
+                            파일 선택하기
+                        </label>
+                    </div>
+                </div>
+
+                <div class="w-[50%]">
+                    <div class="flex flex-row">
+                        <div class="flex flex-col mb-2">
+                            <label for="ox">O / X 문제 수</label>
+                            <input type="number" id="ox" style="color: black" th:field="*{ox}" th:default="${1}" min="0" class="w-1/2 border rounded px-2 py-1" onchange="checkTotal()" />
+
+                        </div>
+
+                        <div class="flex flex-col mb-2">
+                            <label for="multipleChoice">객관식 문제 수</label>
+                            <input type="number" id="multipleChoice" style="color: black" th:field="*{multipleChoice}" value="1" min="0" class="w-1/2 border rounded px-2 py-1" onchange="checkTotal()" />
+
+                        </div>
+
+                        <div class="flex flex-col mb-2">
+                            <label for="shortAnswer">주관식 문제 수</label>
+                            <input type="number" id="shortAnswer" style="color: black" th:field="*{shortAnswer}" value="1" min="0" class="w-1/2 border rounded px-2 py-1" onchange="checkTotal()" />
+
+                        </div>
+                    </div>
+
+                    <div id="error-0" class="text-red-500 mt-2">문제의 총 수가 1개 이상이여야 합니다.</div>
+                    <div id="error-20" class="text-red-500 mt-2 hidden">문제의 총 수가 20개 이하여야 합니다.</div>
+                </div>
+            </div>
+
+            <div class="flex justify-end bottom-2">
+                <button id="submit-button" type="submit" class="mt-10 mb-10 bg-blue-500 text-white rounded-lg px-4 py-2 hover:bg-blue-600 transition duration-300" disabled>퀴즈 생성</button>
+            </div>
+        </form>
+
+        <div th:if="${loginMember == null}" class="m-20 flex flex-row justify-center">
+            <h2>로그인 후 이용 가능합니다!</h2>
+        </div>
+    </div>
+</div>
+<a href="/" class="material-symbols-outlined" id="left-btn">keyboard_double_arrow_left</a>
+<a href="/" class="material-symbols-outlined" id="right-btn">keyboard_double_arrow_right</a>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/js/upload_file.js"></script>
+</html>

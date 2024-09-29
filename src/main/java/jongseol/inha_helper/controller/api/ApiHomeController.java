@@ -1,4 +1,4 @@
-package jongseol.inha_helper.api;
+package jongseol.inha_helper.controller.api;
 
 import jakarta.servlet.http.HttpSession;
 import jongseol.inha_helper.domain.Member;

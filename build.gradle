@@ -54,6 +54,9 @@ dependencies {
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 
+    // pdf 처리
+    implementation 'org.apache.pdfbox:pdfbox:2.0.24' // 최신 버전 확인
+
 }
 
 tasks.named('test') {

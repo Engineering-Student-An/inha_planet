@@ -10,6 +10,7 @@
 }
 
 .checkbox .icon {
+    margin-top:20px;
     margin-right: 10px;
     top: -15px; /* 체크박스의 세로 기준을 위로 조정 */
 

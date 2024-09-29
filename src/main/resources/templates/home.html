@@ -3,137 +3,83 @@
 <head th:replace="~{fragments/header :: header}"></head>
 <link rel="stylesheet" href="/css/post_it.css"/>
 <link rel="stylesheet" href="/css/jelly_check_box.css"/>
-<link rel="stylesheet" href="/css/black_board.css"/>
+<link rel="stylesheet" href="/css/note.css"/>
 <link rel="stylesheet" href="/css/left_right_button.css"/>
+
 <body class="flex flex-col">
 <div th:replace="~{fragments/bodyHeader :: bodyHeader}"></div>
 <div id="wrap" class="flex flex-row justify-center items-center">
 
-    <div class="container w-[80%]">
-        <div class="board-tools">
-            <div class="pen"></div>
-            <div class="eraser">지우개<div class="eraser-bg"></div>
-            </div>
-        </div>
+    <div class="background w-[80%]">
 
         <div class="flex justify-center mb-10">
-
+            <img src="https://symbl-world.akamaized.net/i/webp/2b/e8d6ffcbb94883e25a7c14dbbb9055.webp" style="transform: scaleX(-1); width: 50px; margin-right: 20px">
             <h2 th:unless="${loginMember==null}" class="underline" style="text-decoration-color: #f94d6a;" th:text="${loginMember.name} + '님 환영합니다!'"></h2>
-            <h2 th:if="${loginMember==null}">로그인하셈!</h2>
+
+            <h2 th:if="${loginMember==null}">로그인 후 이용 가능합니다!</h2>
         </div>
 
-        <div class="flex justify-between ">
-            <div th:unless="${loginMember==null}" class="mx-auto pr-20">
-                <p>오늘의 강의</p>
+        <div class="flex flex-col justify-center items-center mb-10">
+            <div><h3>오늘의 강의</h3></div>
+
+            <div th:unless="${loginMember==null}">
                 <h2 th:if="${todaySubjects.size()==0}">자.습.</h2>
                 <div th:each="subject : ${todaySubjects}">
                     <p th:text="${subject.name + ' (' + subject.time + ')'}"></p>
                 </div>
             </div>
+        </div>
 
-            <div class="flex flex-col">
-                <div class="rgyPostIt mb-10">
-                    <h2 class="mb-2"><span class="material-symbols-outlined" style="font-size: 30px">assignment</span> 아직 제출하지 않은 과제</h2>
-                    <div th:each="assignment : ${remainAssignments}"
-                         th:if="${assignment.assignmentType != 'VIDEO'}">
-                        <div class="flex justify-start items-start">
-                                <label class='checkbox'>
-                                    <input type="checkbox" th:attr="data-id=${assignment.memberAssignmentId}" onclick="confirmComplete(this)"/>
-                                    <span class="icon"></span>
-                                </label>
+        <div class="flex justify-evenly">
+            <div class="rgyPostIt mb-10">
+                <h2 class="mb-2"><span class="material-symbols-outlined" style="font-size: 30px">assignment</span> 아직 제출하지 않은 과제</h2>
+                <div th:each="assignment : ${remainAssignments}"
+                     th:if="${assignment.assignmentType != 'VIDEO'}">
+                    <div class="flex justify-start items-start">
+                        <label class='checkbox'>
+                            <input type="checkbox" th:attr="data-id=${assignment.memberAssignmentId}" onclick="confirmComplete(this)"/>
+                            <span class="icon"></span>
+                        </label>
 
-                                <div class="flex flex-col justify-start">
-                                    <p th:text="${'[' + assignment.subjectName + '] '}"></p>
-                                    <p th:text="${assignment.name}"></p>
-                                    <p class="remainingTime" th:data-remaining-seconds="${assignment.remainingSeconds}"></p>
-                                </div>
-
+                        <div class="flex flex-col justify-start">
+                            <p th:text="${'[' + assignment.subjectName + '] '}"></p>
+                            <p th:text="${assignment.name}"></p>
+                            <p class="remainingTime" th:data-remaining-seconds="${assignment.remainingSeconds}"></p>
                         </div>
 
                     </div>
-                </div>
-                <div class="rgyPostIt mb-10">
-                    <h2 class="mb-2"><span class="material-symbols-outlined" style="font-size: 30px">videocam</span> 아직 시청하지 않은 웹강</h2>
-                    <div th:each="assignment : ${remainAssignments}"
-                         th:if="${assignment.assignmentType == 'VIDEO'}">
-                        <div class="flex justify-start items-start">
-                            <label class='checkbox'>
-                                <input type="checkbox" th:attr="data-id=${assignment.memberAssignmentId}" onclick="confirmComplete(this)"/>
-                                <span class="icon"></span>
-                            </label>
 
-                            <div class="flex flex-col justify-start">
-                                <p th:text="${'[' + assignment.subjectName + '] '}"></p>
-                                <p th:text="${assignment.name}"></p>
-                                <p class="remainingTime" th:data-remaining-seconds="${assignment.remainingSeconds}"></p>
-                            </div>
-
-                        </div>
-                    </div>
                 </div>
             </div>
 
+            <div class="rgyPostIt mb-10">
+                <h2 class="mb-2"><span class="material-symbols-outlined" style="font-size: 30px">videocam</span> 아직 시청하지 않은 웹강</h2>
+                <div th:each="assignment : ${remainAssignments}"
+                     th:if="${assignment.assignmentType == 'VIDEO'}">
+                    <div class="flex justify-start items-start">
+                        <label class='checkbox'>
+                            <input type="checkbox" th:attr="data-id=${assignment.memberAssignmentId}" onclick="confirmComplete(this)"/>
+                            <span class="icon"></span>
+                        </label>
+
+                        <div class="flex flex-col justify-start">
+                            <p th:text="${'[' + assignment.subjectName + '] '}"></p>
+                            <p th:text="${assignment.name}"></p>
+                            <p class="remainingTime" th:data-remaining-seconds="${assignment.remainingSeconds}"></p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
 
-
     </div>
-    <a href="/" class="material-symbols-outlined" id="left-btn">keyboard_double_arrow_left</a>
-    <a href="/" class="material-symbols-outlined" id="right-btn">keyboard_double_arrow_right</a>
+    <a href="/quiz" class="material-symbols-outlined" id="left-btn">keyboard_double_arrow_left</a>
+    <a href="/quiz" class="material-symbols-outlined" id="right-btn">keyboard_double_arrow_right</a>
 
 </div>
 <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 <script src="/js/check_box.js"></script>
-<script>
-    function updateRemainingTime() {
-        var remainingTimeElements = document.querySelectorAll('.remainingTime'); // 모든 남은 시간 요소 선택
-
-        remainingTimeElements.forEach(function(remainingTimeElement) {
-            var remainingSeconds = parseInt(remainingTimeElement.dataset.remainingSeconds);
-
-            if (remainingSeconds > 0) {
-                remainingSeconds--;
-
-                var days = Math.floor(remainingSeconds / 86400); // 1일 = 86400초
-                var hours = Math.floor((remainingSeconds % 86400) / 3600); // 1시간 = 3600초
-                var minutes = Math.floor((remainingSeconds % 3600) / 60); // 1분 = 60초
-                var seconds = remainingSeconds % 60; // 남은 초
-
-                var timeString = '<span class="material-symbols-outlined">timer</span> D-';
-                if (days > 0) {
-                    timeString += days + "일 ";
-                }
-                if (hours > 0) {
-                    timeString += hours + "시간 ";
-                }
-                timeString += minutes + "분 " + seconds + "초";
-
-                remainingTimeElement.innerHTML = timeString; // 최종 문자열 설정
-                remainingTimeElement.dataset.remainingSeconds = remainingSeconds; // 업데이트된 값 저장
-
-                // 색상 변경 로직
-                if (days <= 0 && hours <= 0) {
-                    remainingTimeElement.style.color = "purple"; // 만료된 경우
-                } else if (days < 1) {
-                    remainingTimeElement.style.color = "red"; // 1일 이하
-                } else if (days <= 3) {
-                    remainingTimeElement.style.color = "darkorange"; // 3일 이하 (주황색보다 진한 색)
-                } else {
-                    remainingTimeElement.style.color = ""; // 기본 색상
-                }
-
-            } else {
-                remainingTimeElement.textContent = "마감기한이 만료되었습니다!";
-                remainingTimeElement.dataset.remainingSeconds = 0; // 더 이상 업데이트하지 않도록 설정
-                remainingTimeElement.style.color = "purple"; // 만료된 경우 색상 설정
-            }
-        });
-    }
-
-    window.onload = function() {
-        updateRemainingTime(); // 페이지 로드 시 즉시 업데이트
-        setInterval(updateRemainingTime, 1000); // 1초마다 업데이트
-    };
-
-</script>
+<script src="/js/remaining_time.js"></script>
 </html>
