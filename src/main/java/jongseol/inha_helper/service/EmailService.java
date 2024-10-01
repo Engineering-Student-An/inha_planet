@@ -68,10 +68,4 @@ public class EmailService {
         return templateEngine.process(type, context);
     }
 
-//    public String setContext(String name, String itemName, String type) {
-//        Context context = new Context();
-//        context.setVariable("name", name);
-//        context.setVariable("itemName", itemName);
-//        return templateEngine.process(type, context);
-//    }
 }
