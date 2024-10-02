@@ -104,16 +104,4 @@ public class MemberAssignmentService {
         memberAssignment.get().setCompleted();
     }
 
-    // 남은 과제 반환
-//    public List<AssignmentResponseDto> getRemainAssignments(Member member) {
-//
-//        List<AssignmentResponseDto> remainAssignments = new ArrayList<>();
-//        // 멤버 - 과제 에서 완료되지 않은 리스트 찾음
-//        List<MemberAssignment> find2 = findByCompletedAndMemberId(false, member.getId());
-//        for (MemberAssignment memberAssignment : find2) {
-//            remainAssignments.add(AssignmentMapper.INSTANCE.toResponseDto(assignmentService.findByWebId(memberAssignment.getAssignment().getWebId()).orElse(null)));
-//        }
-//
-//        return remainAssignments;
-//    }
 }
