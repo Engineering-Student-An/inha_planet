@@ -7,7 +7,6 @@ import jongseol.inha_helper.domain.Member;
 import jongseol.inha_helper.domain.dto.IclassForm;
 import jongseol.inha_helper.domain.dto.JoinRequest;
 import jongseol.inha_helper.domain.dto.LoginRequest;
-import jongseol.inha_helper.service.CoursemosService;
 import jongseol.inha_helper.service.MemberAssignmentService;
 import jongseol.inha_helper.service.MemberService;
 import jongseol.inha_helper.service.SubjectService;
@@ -30,7 +29,6 @@ public class HomeController {
     private final MemberService memberService;
     private final SubjectService subjectService;
     private final MemberAssignmentService memberAssignmentService;
-    private final CoursemosService coursemosService;
 
     @GetMapping("/")
     public String home(Model model) {
