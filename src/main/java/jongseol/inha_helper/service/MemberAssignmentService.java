@@ -89,10 +89,6 @@ public class MemberAssignmentService {
         return memberAssignmentRepository.findMemberAssignmentsByCompletedAndMember_Id(completed, memberId);
     }
 
-    public List<MemberAssignment> findByCompleted(boolean completed) {
-        return memberAssignmentRepository.findMemberAssignmentsByCompleted(completed);
-    }
-
     @Transactional
     public void setCompleted(Long memberAssignmentId) {
 
