@@ -41,10 +41,6 @@ public class MemberService{
         return memberRepository.existsByLoginId(loginId);
     }
 
-    public Member findMemberByLoginId(String loginId) {
-        return memberRepository.findMemberByLoginId(loginId);
-    }
-
     public Member findMemberById(Long id) {
         return memberRepository.findById(id).orElse(null);
     }
