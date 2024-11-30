@@ -143,8 +143,8 @@ public class CoursemosService {
         ObjectMapper mapper = new ObjectMapper();
         List<Long> ids = new ArrayList<>();
         try {
-            CoursemosResponse response1 = mapper.readValue(jsonString, CoursemosResponse.class);
-            for (Course course : response1.getData()) {
+            CoursemosResponse coursemosResponse = mapper.readValue(jsonString, CoursemosResponse.class);
+            for (Course course : coursemosResponse.getData()) {
                 if (course.getCu_visible() == 1 && !course.getDay_cd().isEmpty()) {
                     ids.add(course.getId());
 
