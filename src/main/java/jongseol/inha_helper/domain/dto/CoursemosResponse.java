@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class Response {
+public class CoursemosResponse {
     private String result;
     private List<Course> data;
 

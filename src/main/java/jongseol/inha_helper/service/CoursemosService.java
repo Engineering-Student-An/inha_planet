@@ -7,7 +7,7 @@ import jongseol.inha_helper.domain.Member;
 import jongseol.inha_helper.domain.dto.AssignmentRequestDto;
 import jongseol.inha_helper.domain.dto.AssignmentType;
 import jongseol.inha_helper.domain.dto.Course;
-import jongseol.inha_helper.domain.dto.Response;
+import jongseol.inha_helper.domain.dto.CoursemosResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -143,7 +143,7 @@ public class CoursemosService {
         ObjectMapper mapper = new ObjectMapper();
         List<Long> ids = new ArrayList<>();
         try {
-            Response response1 = mapper.readValue(jsonString, Response.class);
+            CoursemosResponse response1 = mapper.readValue(jsonString, CoursemosResponse.class);
             for (Course course : response1.getData()) {
                 if (course.getCu_visible() == 1 && !course.getDay_cd().isEmpty()) {
                     ids.add(course.getId());
